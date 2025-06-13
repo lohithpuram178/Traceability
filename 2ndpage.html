@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Traceability – Search</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+      body { background: #e0f0ff; display: flex; flex-direction: column; min-height: 100vh; position: relative; }
+
+      /* ─── top logo ─── */
+      header { position: relative; height: 64px; padding: 1rem; }
+      header img { position: absolute; top: 8px; right: 12px; width: 120px; height: auto; }
+
+      /* ─── search card ─── */
+      main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 1rem; }
+      .search-card { width: 100%; max-width: 360px; background: #fff; padding: 2rem 1.5rem 1rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,.1); text-align: center; position: relative; }
+      .search-card input[type="text"] { width: 100%; padding: .8rem .9rem; border: 1px solid #ccc; border-radius: 10px; font-size: 1rem; }
+      .or { margin: .75rem 0; font-size: .9rem; color: #666; }
+      .search-card button { width: 100%; margin-top: 1rem; padding: .8rem .9rem; background: #0072ce; color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: opacity .2s; }
+      .search-card button:hover { opacity: .9; }
+
+      /* ─── dropdown lists ─── */
+      .dropdown { position: absolute; left: 0; right: 0; background: #fff; border: 1px solid #d4d4d4; border-top: none; max-height: 180px; overflow-y: auto; list-style: none; z-index: 10; }
+      .dropdown li { padding: .6rem .8rem; cursor: pointer; transition: background .15s; }
+      .dropdown li:hover { background: #f0f8ff; }
+
+      /* ─── bottom strip ─── */
+      footer img { width: 100%; height: auto; display: block; }
+    </style>
+  </head>
+  <body>
+    <!-- ─── Bosch logo ─── -->
+    <header><img src="https://raw.githubusercontent.com/lohithpuram178/Traceability/main/Bosch_logo.png" alt="Bosch logo"></header>
+
+    <!-- ─── search card ─── -->
+    <main>
+      <div class="search-card">
+        <div style="position:relative;">
+          <input id="nameInput" type="text" placeholder="Enter Name" autocomplete="off">
+          <ul id="nameDropdown" class="dropdown" style="display:none;"></ul>
+        </div>
+        <div class="or">or</div>
+        <div style="position:relative;">
+          <input id="enInput" type="text" placeholder="Enter E-number" autocomplete="off">
+          <ul id="enDropdown" class="dropdown" style="display:none;"></ul>
+        </div>
+        <button id="searchBtn">Search</button>
+      </div>
+    </main>
+
+    <!-- ─── decorative bottom strip ─── -->
+    <footer><img src="https://raw.githubusercontent.com/lohithpuram178/Traceability/main/top%20part.png" alt="decorative strip"></footer>
+
+    <script>
+      const API_URL = "https://script.google.com/macros/s/AKfycbx8u4mSbdQXDFBqMGKxNTELPwkIs5fXLth0BD7sf0uRAWz0SQDTVK34Yc8Et_a3Z2df/exec";
+
+      let data = [];
+      const nameInput = document.getElementById("nameInput");
+      const enInput   = document.getElementById("enInput");
+      const nameDD    = document.getElementById("nameDropdown");
+      const enDD      = document.getElementById("enDropdown");
+      const searchBtn = document.getElementById("searchBtn");
+
+      fetch(API_URL).then(r=>r.json()).then(j=>data=j).catch(err=>alert("Error loading data: "+err));
+
+      function getDistinct(items, key) {
+        const seen = new Set();
+        return items.filter(item => {
+          const val = item[key];
+          if (seen.has(val)) return false;
+          seen.add(val);
+          return true;
+        });
+      }
+
+      function buildDropdown(listEl, items, key){
+        listEl.innerHTML="";
+        if(!items.length){listEl.style.display="none";return;}
+        items.forEach(row=>{
+          const li=document.createElement("li");
+          li.textContent=row[key];
+          li.addEventListener("click",()=>{
+            nameInput.value=row["Name"];
+            enInput.value=String(row["Enumber"]);
+            nameDD.style.display="none";
+            enDD.style.display="none";
+          });
+          listEl.appendChild(li);
+        });
+        listEl.style.display="block";
+      }
+
+      function filterName(){
+        const v=nameInput.value.trim().toLowerCase();
+        if(!v){nameDD.style.display="none";return;}
+        const matches = data.filter(r=>String(r["Name"]).toLowerCase().startsWith(v));
+        buildDropdown(nameDD, getDistinct(matches, "Name"), "Name");
+      }
+      function filterEn(){
+        const v=enInput.value.trim().toLowerCase();
+        if(!v){enDD.style.display="none";return;}
+        const matches = data.filter(r=>String(r["Enumber"]).toLowerCase().startsWith(v));
+        buildDropdown(enDD, getDistinct(matches, "Enumber"), "Enumber");
+      }
+
+      function performSearch(){
+        const n=nameInput.value.trim().toLowerCase();
+        const e=enInput.value.trim().toLowerCase();
+        const match=data.find(r=>(!n||String(r["Name"]).toLowerCase().startsWith(n))&&(!e||String(r["Enumber"]).toLowerCase().startsWith(e)));
+        if(match){
+          sessionStorage.setItem("selectedName",match["Name"]);
+          sessionStorage.setItem("selectedEn",match["Enumber"]);
+          window.location.href="3rdpage.html"; // renamed
+        }else alert("No match found");
+      }
+
+      nameInput.addEventListener("input",filterName);
+      enInput.addEventListener("input",filterEn);
+      searchBtn.addEventListener("click",performSearch);
+      document.addEventListener("click",e=>{
+        if(!nameInput.contains(e.target)) nameDD.style.display="none";
+        if(!enInput.contains(e.target))   enDD.style.display="none";
+      });
+    </script>
+  </body>
+</html>

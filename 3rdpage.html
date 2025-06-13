@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Traceability – Details</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+      body {
+        background: #e0f0ff;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        position: relative;
+      }
+      header {
+        position: relative;
+        height: 64px;
+        padding: 1rem;
+      }
+      header img {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        width: 120px;
+        height: auto;
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+      }
+      .detail-card {
+        width: 100%;
+        max-width: 380px;
+        background: #fff;
+        padding: 2rem 1.5rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        font-size: 1.4rem;
+        color: #003e7e;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+      .info {
+        margin-bottom: 1.2rem;
+        line-height: 1.5;
+      }
+      .info span {
+        font-weight: bold;
+      }
+      /* table */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+      th, td {
+        border: 1px solid #d4d4d4;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        text-align: center;
+      }
+      th {
+        background: #f3f6fa;
+      }
+
+      .back-btn {
+        margin-top: 1.5rem;
+        display: block;
+        width: 100%;
+        padding: 0.8rem 0.9rem;
+        background: #0072ce;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      footer img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <img src="https://raw.githubusercontent.com/lohithpuram178/Traceability/main/Bosch_logo.png" alt="Bosch logo" />
+    </header>
+
+    <main>
+      <div class="detail-card" id="card">
+        <h2 id="title">Details</h2>
+        <div class="info"><span>Name:</span> <span id="nameVal"></span></div>
+        <div class="info"><span>Enumber:</span> <span id="enVal"></span></div>
+        <div class="info"><span>Joining Date:</span> <span id="joinVal"></span></div>
+        <div class="info"><span>Valid Till:</span> <span id="validVal"></span></div>
+
+        <h3 style="margin-top:1.5rem;text-align:center;">Training Records</h3>
+        <table id="trainTable">
+          <thead>
+            <tr>
+              <th>Trained On</th>
+              <th>Trainer</th>
+              <th>Training Date</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <a href="2ndpage.html" class="back-btn">Back</a>
+      </div>
+    </main>
+
+    <footer>
+      <img src="https://raw.githubusercontent.com/lohithpuram178/Traceability/main/top%20part.png" alt="decorative strip" />
+    </footer>
+
+    <script>
+  const API_URL = "https://script.google.com/macros/s/AKfycbx8u4mSbdQXDFBqMGKxNTELPwkIs5fXLth0BD7sf0uRAWz0SQDTVK34Yc8Et_a3Z2df/exec";
+
+  const selName = sessionStorage.getItem("selectedName");
+  const selEn   = sessionStorage.getItem("selectedEn");
+
+  if (!selName && !selEn) {
+    window.location.href = "2ndpage.html"; // assuming updated name
+  }
+
+  document.getElementById("nameVal").textContent  = selName || "-";
+  document.getElementById("enVal").textContent    = selEn   || "-";
+
+  // Format date to YYYY-MM-DD only
+  function fmt(dateStr) {
+    if (!dateStr) return "-";
+    return String(dateStr).split(/[ T]/)[0];  // Split by space or 'T'
+  }
+
+  fetch(API_URL)
+    .then(res => res.json())
+    .then(json => {
+      const matches = json.filter(r => String(r["Name"]) === selName && String(r["Enumber"]) === selEn);
+      if (matches.length === 0) {
+        alert("No data found");
+        return;
+      }
+
+      document.getElementById("joinVal").textContent  = fmt(matches[0]["Joining Date"]);
+      document.getElementById("validVal").textContent = fmt(matches[0]["Valid Till"]);
+
+      const seen = new Set();
+      const tbody = document.getElementById("trainTable").querySelector("tbody");
+      matches.forEach(r => {
+        const key = `${r["Trained On"]}|${r["Trainer"]}|${r["Training Date"]}`;
+        if (seen.has(key)) return;
+        seen.add(key);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r["Trained On"]}</td>
+          <td>${r["Trainer"]}</td>
+          <td>${fmt(r["Training Date"])}</td>`;
+        tbody.appendChild(tr);
+      });
+    })
+    .catch(err => alert("Error loading details: " + err));
+</script>
