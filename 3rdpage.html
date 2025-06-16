@@ -118,6 +118,7 @@
               <th>Trained On</th>
               <th>Trainer</th>
               <th>Training Date</th>
+              <th>Record File</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -132,7 +133,7 @@
     </footer>
 
     <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbx8u4mSbdQXDFBqMGKxNTELPwkIs5fXLth0BD7sf0uRAWz0SQDTVK34Yc8Et_a3Z2df/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbySHuR0hoZGwIHuube6ib7-MzkAuKIxgN1K7-FPc1NHfD_j44K58LNG1mzh964D27t7/exec";
 
   const selName = sessionStorage.getItem("selectedName");
   const selEn   = sessionStorage.getItem("selectedEn");
@@ -168,13 +169,25 @@
         const key = `${r["Trained On"]}|${r["Trainer"]}|${r["Training Date"]}`;
         if (seen.has(key)) return;
         seen.add(key);
+
+        // Build Record File cell
+        const pdfURL = (r["Upload File"] || "").trim();
+        const fileCell = pdfURL
+          ? `<a href="${pdfURL}" target="_blank" title="Open PDF">
+               <img src="https://cdn3d.iconscout.com/3d/premium/thumb/document-10136959-8231203.png" alt="PDF" width="24" height="24" style="cursor:pointer;" />
+             </a>`
+          : `<span style="font-size:0.8rem;color:#777;">no file found</span>`;
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${r["Trained On"]}</td>
           <td>${r["Trainer"]}</td>
-          <td>${fmt(r["Training Date"])}</td>`;
+          <td>${fmt(r["Training Date"])}</td>
+          <td>${fileCell}</td>`;
         tbody.appendChild(tr);
       });
     })
     .catch(err => alert("Error loading details: " + err));
 </script>
+  </body>
+</html>
