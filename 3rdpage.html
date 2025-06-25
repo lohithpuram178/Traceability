@@ -1,193 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Traceability – Details</title>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-      }
-      body {
-        background: #e0f0ff;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        position: relative;
-      }
-      header {
-        position: relative;
-        height: 64px;
-        padding: 1rem;
-      }
-      header img {
-        position: absolute;
-        top: 8px;
-        right: 12px;
-        width: 120px;
-        height: auto;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Traceability – Details</title>
 
-      main {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 1rem;
-      }
-      .detail-card {
-        width: 100%;
-        max-width: 380px;
-        background: #fff;
-        padding: 2rem 1.5rem;
-        border-radius: 16px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
-      h2 {
-        font-size: 1.4rem;
-        color: #003e7e;
-        margin-bottom: 1rem;
-        text-align: center;
-      }
-      .info {
-        margin-bottom: 1.2rem;
-        line-height: 1.5;
-      }
-      .info span {
-        font-weight: bold;
-      }
-      /* table */
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 1rem;
-      }
-      th, td {
-        border: 1px solid #d4d4d4;
-        padding: 0.5rem;
-        font-size: 0.9rem;
-        text-align: center;
-      }
-      th {
-        background: #f3f6fa;
-      }
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background: #e0f0ff; display: flex; flex-direction: column; min-height: 100vh; }
+    header { position: relative; height: 64px; padding: 1rem; }
+    header img { position: absolute; top: 8px; right: 12px; width: 120px; }
 
-      .back-btn {
-        margin-top: 1.5rem;
-        display: block;
-        width: 100%;
-        padding: 0.8rem 0.9rem;
-        background: #0072ce;
-        color: #fff;
-        border: none;
-        border-radius: 10px;
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-      }
+    main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 1rem; }
+    .detail-card {
+      width: 100%; max-width: 380px; background: #fff; padding: 2rem 1.5rem;
+      border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 { font-size: 1.4rem; color: #003e7e; margin-bottom: 1rem; text-align: center; }
+    .info { margin-bottom: 1.2rem; line-height: 1.5; }
+    .info span { font-weight: bold; }
 
-      footer img {
-        width: 100%;
-        height: auto;
-        display: block;
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <img src="https://raw.githubusercontent.com/lohithpuram178/Traceability/main/Bosch_logo.png" alt="Bosch logo" />
-    </header>
+    /* table */
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { border: 1px solid #d4d4d4; padding: 0.5rem; font-size: 0.9rem; text-align: center; }
+    th { background: #f3f6fa; }
 
-    <main>
-      <div class="detail-card" id="card">
-        <h2 id="title">Details</h2>
-        <div class="info"><span>Name:</span> <span id="nameVal"></span></div>
-        <div class="info"><span>Enumber:</span> <span id="enVal"></span></div>
-        <div class="info"><span>Joining Date:</span> <span id="joinVal"></span></div>
-        <div class="info"><span>Valid Till:</span> <span id="validVal"></span></div>
+    .back-btn {
+      margin-top: 1.5rem; display: block; width: 100%; padding: 0.8rem 0.9rem;
+      background: #0072ce; color: #fff; border: none; border-radius: 10px;
+      font-size: 1rem; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none;
+    }
+    footer img { width: 100%; display: block; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://raw.githubusercontent.com/lohithpuram178/Traceability/main/Bosch_logo.png" alt="Bosch logo">
+  </header>
 
-        <h3 style="margin-top:1.5rem;text-align:center;">Training Records</h3>
-        <table id="trainTable">
-          <thead>
-            <tr>
-              <th>Trained On</th>
-              <th>Trainer</th>
-              <th>Training Date</th>
-              <th>Record File</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+  <main>
+    <div class="detail-card">
+      <h2>Details</h2>
+      <div class="info"><span>Name:</span> <span id="nameVal"></span></div>
+      <div class="info"><span>Enumber:</span> <span id="enVal"></span></div>
+      <div class="info"><span>Joining Date:</span> <span id="joinVal"></span></div>
+      <div class="info"><span>Valid Till:</span> <span id="validVal"></span></div>
 
-        <a href="2ndpage.html" class="back-btn">Back</a>
-      </div>
-    </main>
+      <h3 style="margin-top:1.5rem;text-align:center;">Training Records</h3>
+      <table id="trainTable">
+        <thead>
+          <tr>
+            <th>Trained On</th>
+            <th>Training Date</th>
+            <th>Record File</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
 
-    <footer>
-      <img src="https://raw.githubusercontent.com/lohithpuram178/Traceability/main/top%20part.png" alt="decorative strip" />
-    </footer>
+      <a href="2ndpage.html" class="back-btn">Back</a>
+    </div>
+  </main>
 
-    <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbySHuR0hoZGwIHuube6ib7-MzkAuKIxgN1K7-FPc1NHfD_j44K58LNG1mzh964D27t7/exec";
+  <footer>
+    <img src="https://raw.githubusercontent.com/lohithpuram178/Traceability/main/top%20part.png" alt="">
+  </footer>
 
-  const selName = sessionStorage.getItem("selectedName");
-  const selEn   = sessionStorage.getItem("selectedEn");
+  <script>
+    /** 1.  NEW Apps‑Script endpoint **/
+    const API_URL = "https://script.google.com/macros/s/AKfycbwXa1J9Ai7qPUaLs5e0r5N3Ci9K-0u6b-qA33sjukOlQY75JoM_Kxq2JnNBjjbLLY3t/exec";
 
-  if (!selName && !selEn) {
-    window.location.href = "2ndpage.html"; // assuming updated name
-  }
+    /** 2.  Name & Enumber from the search page **/
+    const selName = sessionStorage.getItem("selectedName");
+    const selEn   = sessionStorage.getItem("selectedEn");
+    if (!selName || !selEn) window.location.href = "2ndpage.html";
 
-  document.getElementById("nameVal").textContent  = selName || "-";
-  document.getElementById("enVal").textContent    = selEn   || "-";
+    document.getElementById("nameVal").textContent = selName;
+    document.getElementById("enVal").textContent   = selEn;
 
-  // Format date to YYYY-MM-DD only
-  function fmt(dateStr) {
-    if (!dateStr) return "-";
-    return String(dateStr).split(/[ T]/)[0];  // Split by space or 'T'
-  }
+    const fmt = d => {
+      if (!d) return "-";
+      const str = String(d);
+      if (str.includes("T")) return str.split("T")[0];  // ISO format
+      if (str.includes(" ")) return str.split(" ")[0]; // space-separated
+      return str; // fallback
+    };
 
-  fetch(API_URL)
-    .then(res => res.json())
-    .then(json => {
-      const matches = json.filter(r => String(r["Name"]) === selName && String(r["Enumber"]) === selEn);
-      if (matches.length === 0) {
-        alert("No data found");
-        return;
-      }
 
-      document.getElementById("joinVal").textContent  = fmt(matches[0]["Joining Date"]);
-      document.getElementById("validVal").textContent = fmt(matches[0]["Valid Till"]);
+    /** 3.  Pull matching rows and fill the card **/
+    fetch(API_URL)
+      .then(r => r.json())
+      .then(rows => {
+        const matches = rows.filter(r =>
+          String(r["Name"])     === selName &&
+          String(r["Enumber"])  === selEn
+        );
 
-      const seen = new Set();
-      const tbody = document.getElementById("trainTable").querySelector("tbody");
-      matches.forEach(r => {
-        const key = `${r["Trained On"]}|${r["Trainer"]}|${r["Training Date"]}`;
-        if (seen.has(key)) return;
-        seen.add(key);
+        if (!matches.length) { alert("No data found"); return; }
 
-        // Build Record File cell
-        const pdfURL = (r["Upload File"] || "").trim();
-        const fileCell = pdfURL
-          ? `<a href="${pdfURL}" target="_blank" title="Open PDF">
-               <img src="https://cdn3d.iconscout.com/3d/premium/thumb/document-10136959-8231203.png" alt="PDF" width="24" height="24" style="cursor:pointer;" />
-             </a>`
-          : `<span style="font-size:0.8rem;color:#777;">no file found</span>`;
+        // all personal info identical ⇒ use first row
+        const first = matches[0];
+        document.getElementById("joinVal").textContent  = fmt(first["Joining Date"]);
+        document.getElementById("validVal").textContent = fmt(first["Valid Till"]);
 
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${r["Trained On"]}</td>
-          <td>${r["Trainer"]}</td>
-          <td>${fmt(r["Training Date"])}</td>
-          <td>${fileCell}</td>`;
-        tbody.appendChild(tr);
-      });
-    })
-    .catch(err => alert("Error loading details: " + err));
-</script>
-  </body>
+        const tbody = document.querySelector("#trainTable tbody");
+        const seen  = new Set();
+        matches.forEach(r => {
+          const key = `${r["Trained On"]}|${r["Training Date"]}`;
+          if (seen.has(key)) return;
+          seen.add(key);
+
+          const fileURL = (r["Upload File"] || "").trim();
+          const fileCell = fileURL
+            ? `<a href="${fileURL}" target="_blank" title="Open PDF">
+                 <img src="https://cdn3d.iconscout.com/3d/premium/thumb/document-10136959-8231203.png" alt="PDF" width="24" height="24">
+               </a>`
+            : `<span style="font-size:0.8rem;color:#777;">no file</span>`;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${r["Trained On"]}</td>
+            <td>${fmt(r["Training Date"])}</td>
+            <td>${fileCell}</td>`;
+          tbody.appendChild(tr);
+        });
+      })
+      .catch(err => alert("Error loading details: " + err));
+  </script>
+</body>
 </html>
